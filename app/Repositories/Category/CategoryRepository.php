@@ -9,6 +9,13 @@ class CategoryRepository implements ICategoryRepository
     public function all(): array
     {
         return Category::query()
+            ->search()
+            ->withParent()
+            ->withChildren()
+            ->withDescendants()
+            ->withProducts()
+            ->withProductsCount()
+            ->withChildrenCount()
             ->paginate()
             ->toArray();
     }
