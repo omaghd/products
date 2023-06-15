@@ -2,31 +2,27 @@
 import Default from "@/Layouts/Default.vue";
 import ProductsTable from "@/Components/Products/ProductsTable.vue";
 
+import getProducts from "@/Composables/Products/getProducts";
+
 import { onMounted, ref } from "vue";
 
-const products = ref([]);
 const page = ref(1);
 const sortDirection = ref('desc')
 
-const getProducts = () => {
-    axios.get(`/api/products?page=${page.value}&sort=${sortDirection.value}`)
-         .then(response => {
-             products.value = response.data.data;
-         });
-}
+const { products, load: loadProducts } = getProducts(page, sortDirection);
 
 const changePage = (p) => {
     page.value = p.split("page=")[1].split("&")[0];
-    getProducts();
+    loadProducts();
 }
 
 const toggleSort = () => {
     sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
-    getProducts();
+    loadProducts();
 }
 
 onMounted(() => {
-    getProducts();
+    loadProducts();
 });
 </script>
 
@@ -36,7 +32,7 @@ onMounted(() => {
                        :sort-direction="sortDirection"
                        @change-page="changePage"
                        @toggle-sort="toggleSort"
-                       @refresh="getProducts"
+                       @refresh="loadProducts"
         />
     </Default>
 </template>
