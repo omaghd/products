@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-const getProducts = (page, sort) => {
+const getProducts = (page, sort, category) => {
     const products = ref([])
     const error = ref(false)
     const isLoading = ref(true)
@@ -9,7 +9,7 @@ const getProducts = (page, sort) => {
         isLoading.value = true
 
         await axios
-            .get(`/api/products?page=${page.value}&sort=${sort.value}`)
+            .get(`/api/products?page=${page.value}&sort=${sort.value}&category=${category.value}`)
             .then((response) => {
                 products.value = response.data.data
             })

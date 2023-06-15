@@ -1,10 +1,14 @@
 <script setup>
 import Pagination from "@/Components/Common/Pagination.vue";
+import NewProductModal from "@/Components/Products/NewProductModal.vue";
+import Autocomplete from "@/Components/Forms/Autocomplete.vue";
 
 import ChevronDownIcon from '@heroicons/vue/24/outline/ChevronDownIcon.js'
 import ChevronUpIcon from '@heroicons/vue/24/outline/ChevronUpIcon.js'
-import NewProductModal from "@/Components/Products/NewProductModal.vue";
-import { ref } from "vue";
+
+import { onMounted, ref, watch } from "vue";
+
+import getCategories from "@/Composables/Categories/getCategories.js";
 
 defineProps({
     products: {
@@ -18,6 +22,20 @@ defineProps({
 })
 
 const open = ref(false);
+
+const emit = defineEmits(['changeCategory', 'refresh', 'toggleSort'])
+
+const { load: loadCategories, categories: categoriesOptions } = getCategories()
+
+const categories = ref([]);
+
+watch(categories, () => {
+    emit('changeCategory', categories.value)
+})
+
+onMounted(() => {
+    loadCategories()
+})
 </script>
 
 <template>
@@ -36,7 +54,16 @@ const open = ref(false);
             </button>
         </div>
     </div>
-    <div class="mt-8 flex flex-col">
+
+    <Autocomplete :options="categoriesOptions"
+                  label="Filter by category"
+                  null-text="Select a category"
+                  class="mt-6 max-w-sm"
+                  :multiple="false"
+                  @update="(value) => (categories = value)"
+    />
+
+    <div class="mt-3 flex flex-col">
         <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">

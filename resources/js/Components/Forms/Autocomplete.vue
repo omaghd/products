@@ -37,9 +37,14 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    multiple: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 })
 
-const selected = ref([])
+const selected = ref(props.multiple ? [] : {})
 let query = ref('')
 
 let filteredItem = computed(() =>
@@ -73,7 +78,7 @@ watch(
 </script>
 
 <template>
-    <Combobox as="div" v-model="selected" multiple>
+    <Combobox as="div" v-model="selected" :multiple="multiple">
         <ComboboxLabel class="block text-sm font-medium text-gray-700">
             {{ label }}
         </ComboboxLabel>
@@ -86,7 +91,7 @@ watch(
             : 'border-gray-300 text-gray-900 focus:border-teal-300 focus:ring-teal-500'
         ]"
                 class="w-full cursor-default rounded-md border bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:ring-1 sm:text-sm"
-                :displayValue="() => selected.length ? selected.map((item) => item?.name).join(', ') : nullText"
+                :displayValue="(item) => (selected.length ? selected.map((item) => item?.name).join(', ') : item?.name) ?? nullText"
                 @change="query = $event.target.value"
             />
             <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
