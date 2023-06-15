@@ -3,6 +3,8 @@ import Pagination from "@/Components/Common/Pagination.vue";
 
 import ChevronDownIcon from '@heroicons/vue/24/outline/ChevronDownIcon.js'
 import ChevronUpIcon from '@heroicons/vue/24/outline/ChevronUpIcon.js'
+import NewProductModal from "@/Components/Products/NewProductModal.vue";
+import { ref } from "vue";
 
 defineProps({
     products: {
@@ -14,9 +16,13 @@ defineProps({
         required: true,
     },
 })
+
+const open = ref(false);
 </script>
 
 <template>
+    <NewProductModal :open="open" @close="open = false" @success="$emit('refresh')"/>
+
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
             <h1 class="text-xl font-semibold text-gray-900">Products</h1>
@@ -24,6 +30,7 @@ defineProps({
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <button type="button"
+                    @click="open = true"
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
                 Add Product
             </button>
@@ -59,7 +66,12 @@ defineProps({
                             <tr v-for="product in products.data" :key="product.id">
                                 <td class="px-3 py-4 text-sm text-gray-500">
                                     <div class="flex items-center">
-                                        <img :src="product.image" alt="" class="flex-none w-16 h-16 rounded-lg" />
+                                        <img
+                                            :src="product.image !== 'https://fakeimg.pl/500x500/cccccc/909090?text=YouCan'
+                                                ? `http://127.0.0.1:8000/${product.image}`
+                                                : 'https://fakeimg.pl/500x500/cccccc/909090?text=YouCan'"
+                                            :alt="product.name"
+                                            class="flex-none w-16 h-16 rounded-lg" />
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
                                             <div class="text-sm text-gray-500">{{ product.description }}</div>

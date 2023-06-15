@@ -12,7 +12,6 @@ const getProducts = () => {
     axios.get(`/api/products?page=${page.value}&sort=${sortDirection.value}`)
          .then(response => {
              products.value = response.data.data;
-             console.log(products.value);
          });
 }
 
@@ -36,6 +35,8 @@ onMounted(() => {
         <ProductsTable :products="products"
                        :sort-direction="sortDirection"
                        @change-page="changePage"
-                       @toggle-sort="toggleSort" />
+                       @toggle-sort="toggleSort"
+                       @refresh="getProducts"
+        />
     </Default>
 </template>

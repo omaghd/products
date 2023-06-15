@@ -30,7 +30,7 @@ class ProductController extends ApiController
 
             $this->productRepository->syncCategories($product->id, $request->get('categories'));
 
-            return $product->fresh();
+            return $this->successResponse("Product created successfully.", $product, 201);
         } catch (\Exception) {
             return $this->errorResponse('Something went wrong.', 500);
         }
