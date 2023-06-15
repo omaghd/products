@@ -8,7 +8,9 @@ class ProductRepository implements IProductRepository
 {
     public function all(): array
     {
-        return Product::all()->toArray();
+        return Product::query()
+            ->paginate()
+            ->toArray();
     }
 
     public function create(array $data): Product

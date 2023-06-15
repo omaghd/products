@@ -8,7 +8,9 @@ class CategoryRepository implements ICategoryRepository
 {
     public function all(): array
     {
-        return Category::all()->toArray();
+        return Category::query()
+            ->paginate()
+            ->toArray();
     }
 
     public function create(array $data): Category
