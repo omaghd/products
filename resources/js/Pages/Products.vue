@@ -6,10 +6,10 @@ import { onMounted, ref } from "vue";
 
 const products = ref([]);
 const page = ref(1);
-const sortDirection = "desc";
+const sortDirection = ref('desc')
 
 const getProducts = () => {
-    axios.get(`/api/products?page=${page.value}&sort=${sortDirection}`)
+    axios.get(`/api/products?page=${page.value}&sort=${sortDirection.value}`)
          .then(response => {
              products.value = response.data.data;
              console.log(products.value);
@@ -21,6 +21,11 @@ const changePage = (p) => {
     getProducts();
 }
 
+const toggleSort = () => {
+    sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
+    getProducts();
+}
+
 onMounted(() => {
     getProducts();
 });
@@ -28,6 +33,9 @@ onMounted(() => {
 
 <template>
     <Default title="Products">
-        <ProductsTable :products="products" @change-page="changePage" />
+        <ProductsTable :products="products"
+                       :sort-direction="sortDirection"
+                       @change-page="changePage"
+                       @toggle-sort="toggleSort" />
     </Default>
 </template>

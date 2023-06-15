@@ -2,10 +2,15 @@
 import Pagination from "@/Components/Common/Pagination.vue";
 
 import ChevronDownIcon from '@heroicons/vue/24/outline/ChevronDownIcon.js'
+import ChevronUpIcon from '@heroicons/vue/24/outline/ChevronUpIcon.js'
 
 defineProps({
     products: {
         type: Array,
+        required: true,
+    },
+    sortDirection: {
+        type: String,
         required: true,
     },
 })
@@ -36,13 +41,14 @@ defineProps({
                                     Product
                                 </th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    <a href="#" class="group inline-flex">
+                                    <button @click="$emit('toggleSort')" class="group inline-flex">
                                         Price
                                         <span
                                             class="ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300">
-                                            <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                            <Component :is="sortDirection === 'desc' ? ChevronDownIcon : ChevronUpIcon"
+                                                       class="h-5 w-5" />
                                         </span>
-                                    </a>
+                                    </button>
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                     <span class="sr-only">Edit</span>
