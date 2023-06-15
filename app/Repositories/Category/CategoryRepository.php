@@ -17,8 +17,11 @@ class CategoryRepository implements ICategoryRepository
             ->withProducts()
             ->withProductsCount()
             ->withChildrenCount()
-            ->paginate()
-            ->toArray();
+            ->when(
+                request('paginate') === '1',
+                fn($query) => $query->paginate()->toArray(),
+                fn($query) => $query->get()->toArray()
+            );
     }
 
     public function create(array $data): Category
