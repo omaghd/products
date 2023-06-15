@@ -3,6 +3,7 @@
 namespace App\Repositories\Product;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductRepository implements IProductRepository
 {
@@ -30,7 +31,11 @@ class ProductRepository implements IProductRepository
 
     public function find(int $id): Product
     {
-        return Product::findOrFail($id);
+        try {
+            return Product::findOrFail($id);
+        } catch (ModelNotFoundException) {
+            throw new ModelNotFoundException('Product not found.');
+        }
     }
 
     public function update(int $id, array $data): Product

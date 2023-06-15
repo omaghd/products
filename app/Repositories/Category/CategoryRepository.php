@@ -3,6 +3,7 @@
 namespace App\Repositories\Category;
 
 use App\Models\Category;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryRepository implements ICategoryRepository
 {
@@ -35,7 +36,11 @@ class CategoryRepository implements ICategoryRepository
 
     public function find(int $id): Category
     {
-        return Category::findOrFail($id);
+        try {
+            return Category::findOrFail($id);
+        } catch (ModelNotFoundException) {
+            throw new ModelNotFoundException('Category not found.');
+        }
     }
 
     public function delete(int $id): void
