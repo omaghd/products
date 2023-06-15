@@ -21,7 +21,7 @@ const open = ref(false);
 </script>
 
 <template>
-    <NewProductModal :open="open" @close="open = false" @success="$emit('refresh')"/>
+    <NewProductModal :open="open" @close="open = false" @success="$emit('refresh')" />
 
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
@@ -63,6 +63,12 @@ const open = ref(false);
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr v-if="products.data?.length === 0">
+                                <td colspan="3" class="px-3 py-4 text-sm text-gray-500 text-center">
+                                    No products found.
+                                </td>
+                            </tr>
+
                             <tr v-for="product in products.data" :key="product.id">
                                 <td class="px-3 py-4 text-sm text-gray-500">
                                     <div class="flex items-center">

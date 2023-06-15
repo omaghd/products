@@ -23,14 +23,14 @@ class ProductController extends ApiController
     public function store(StoreProductRequest $request): Product|JsonResponse
     {
         try {
-            $product = $this->productRepository->create($request->except('categories'));
+            $product = $this->productRepository->create($request->except('categories', 'image'));
 
             if ($request->hasFile('image'))
                 $this->saveImage($product, $request->file('image'));
 
             $this->productRepository->syncCategories($product->id, $request->get('categories'));
 
-            return $this->successResponse("Product created successfully.", $product, 201);
+            return $this->successResponse("Product created successfully.", $product->fresh(), 201);
         } catch (\Exception) {
             return $this->errorResponse('Something went wrong.', 500);
         }
