@@ -9,6 +9,10 @@ class ProductRepository implements IProductRepository
     public function all(): array
     {
         return Product::query()
+            ->search()
+            ->sortByPrice()
+            ->filterByCategory()
+            ->withCategories()
             ->paginate()
             ->toArray();
     }
