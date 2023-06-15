@@ -15,7 +15,9 @@ return new class extends Migration {
             $table->string('name')->unique();
             $table->text('description');
             $table->float('price');
-            $table->text('image')->nullable();
+            $table->text('image')
+                ->nullable()
+                ->default('https://fakeimg.pl/500x500/cccccc/909090?text=YouCan');
             $table->timestamps();
         });
     }
