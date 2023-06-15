@@ -1,9 +1,33 @@
 <script setup>
 import Default from "@/Layouts/Default.vue";
+import ProductsTable from "@/Components/Products/ProductsTable.vue";
+
+import { onMounted, ref } from "vue";
+
+const products = ref([]);
+const page = ref(1);
+const sortDirection = "desc";
+
+const getProducts = () => {
+    axios.get(`/api/products?page=${page.value}&sort=${sortDirection}`)
+         .then(response => {
+             products.value = response.data.data;
+             console.log(products.value);
+         });
+}
+
+const changePage = (p) => {
+    page.value = p.split("page=")[1].split("&")[0];
+    getProducts();
+}
+
+onMounted(() => {
+    getProducts();
+});
 </script>
 
 <template>
     <Default title="Products">
-        Products here..
+        <ProductsTable :products="products" @change-page="changePage" />
     </Default>
 </template>

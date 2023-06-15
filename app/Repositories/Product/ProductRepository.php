@@ -14,7 +14,7 @@ class ProductRepository implements IProductRepository
             ->sortByPrice()
             ->filterByCategory()
             ->withCategories()
-            ->paginate()
+            ->paginate(5)
             ->toArray();
     }
 

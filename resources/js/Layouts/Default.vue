@@ -87,7 +87,6 @@ defineProps({
                         <div class="divide-y divide-gray-200 lg:col-span-9">
                             <div class="py-6 px-4 sm:p-6 lg:pb-8">
                                 <div>
-                                    <h2 class="text-lg leading-6 font-medium text-gray-900">{{ title }}</h2>
                                     <slot></slot>
                                 </div>
                             </div>
