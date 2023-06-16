@@ -40,15 +40,15 @@ class ProductRepository implements IProductRepository
 
     public function update(int $id, array $data): Product
     {
-        $category = $this->find($id);
-        $category->update($data);
+        $product = $this->find($id);
+        $product->update($data);
 
-        return $category;
+        return $product;
     }
 
     public function delete(int $id): void
     {
-        $category = $this->find($id);
-        $category->delete();
+        $product = $this->find($id);
+        $product->delete();
     }
 }
