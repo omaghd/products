@@ -2,13 +2,16 @@
 
 namespace App\Console\Traits;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 trait AskAndValidate
 {
-    protected function askAndValidate(string $message, string $rules, string $column): mixed
+    protected function askAndValidate(string $message, string $column, Request $request): mixed
     {
         $input = $this->ask($message);
+
+        $rules = $request->rules()[$column];
 
         $validator = Validator::make(
             [$column => $input],
@@ -20,7 +23,7 @@ trait AskAndValidate
                 $this->error($error);
             }
 
-            return $this->askAndValidate($message, $rules, $column);
+            return $this->askAndValidate($message, $column, $request);
         }
 
         return $input;

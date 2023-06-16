@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Traits\AskAndValidate;
+use App\Http\Requests\Product\StoreProductRequest;
 use App\Repositories\Category\ICategoryRepository;
 use App\Repositories\Product\IProductRepository;
 use Illuminate\Console\Command;
@@ -19,10 +20,12 @@ class CreateProduct extends Command
     {
         $productRepository = app(IProductRepository::class);
 
-        $name        = $this->askAndValidate('What is the product name?', 'required|string|max:255|unique:products,name', 'name');
-        $description = $this->askAndValidate('What is the product description?', 'required|string', 'description');
-        $price       = $this->askAndValidate('What is the product price?', 'required|numeric|min:0', 'price');
-        $imageURL    = $this->askAndValidate('What is the product image URL?', 'nullable|url', 'image');
+        $request = new StoreProductRequest();
+
+        $name        = $this->askAndValidate('What is the product name?', 'name', $request);
+        $description = $this->askAndValidate('What is the product description?', 'description', $request);
+        $price       = $this->askAndValidate('What is the product price?', 'price', $request);
+        $imageURL    = $this->askAndValidate('What is the product image URL?', 'image', $request);
 
         $categoryIds = $this->getCategoryIds();
 
