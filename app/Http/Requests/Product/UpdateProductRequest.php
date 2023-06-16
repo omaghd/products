@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Rules\UniqueProductName;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductRequest extends FormRequest
@@ -14,7 +15,7 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'         => 'required|string|max:255|unique:products,name,' . $this->product,
+            'name'         => ['required', 'string', 'max:255', new UniqueProductName($this->product)],
             'description'  => 'required|string',
             'price'        => 'required|numeric|min:0',
             'image'        => 'nullable|image|max:2048',

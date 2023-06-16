@@ -10,6 +10,8 @@ interface IProductRepository
 
     public function find(int $id): Product;
 
+    public function findByName(string $name): ?Product;
+
     public function create(array $data): Product;
 
     public function syncCategories(int $id, array $categoryIds): void;

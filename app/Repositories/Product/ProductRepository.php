@@ -38,6 +38,13 @@ class ProductRepository implements IProductRepository
         }
     }
 
+    public function findByName(string $name): ?Product
+    {
+        return Product::query()
+            ->findByName($name)
+            ->first();
+    }
+
     public function update(int $id, array $data): Product
     {
         $product = $this->find($id);

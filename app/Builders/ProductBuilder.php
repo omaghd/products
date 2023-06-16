@@ -24,6 +24,11 @@ class ProductBuilder extends Builder
         );
     }
 
+    public function findByName(string $name): self
+    {
+        return $this->where('name', $name);
+    }
+
     public function sortByPrice(): self
     {
         return $this->when(
