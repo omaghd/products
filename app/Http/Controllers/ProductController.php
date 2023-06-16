@@ -6,12 +6,15 @@ use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product;
 use App\Repositories\Product\IProductRepository;
+use App\Services\FileUploadService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\UploadedFile;
 
 class ProductController extends ApiController
 {
-    public function __construct(protected IProductRepository $productRepository)
+    public function __construct(
+        protected IProductRepository $productRepository,
+        protected FileUploadService  $fileUploadService
+    )
     {
     }
 
@@ -25,8 +28,10 @@ class ProductController extends ApiController
         try {
             $product = $this->productRepository->create($request->except('categories', 'image'));
 
-            if ($request->hasFile('image'))
-                $this->saveImage($product, $request->file('image'));
+            if ($request->hasFile('image')) {
+                $publicPath = $this->fileUploadService->uploadFile($request->file('image'), 'public/products');
+                $this->saveImage($product, $publicPath);
+            }
 
             $this->productRepository->syncCategories($product->id, $request->get('categories'));
 
@@ -36,18 +41,11 @@ class ProductController extends ApiController
         }
     }
 
-    private function saveImage(Product $product, UploadedFile $image)
+    private function saveImage(Product $product, string $path)
     {
-        $savePath  = "public/products/{$product->id}";
-        $finalPath = str_replace(
-            'public',
-            'storage',
-            $image->storePublicly($savePath)
-        );
-
         $this->productRepository->update(
             $product->id,
-            ['image' => $finalPath]
+            ['image' => $path]
         );
     }
 
@@ -56,8 +54,10 @@ class ProductController extends ApiController
         try {
             $product = $this->productRepository->update($id, $request->except('categories'));
 
-            if ($request->hasFile('image'))
-                $this->saveImage($product, $request->image);
+            if ($request->hasFile('image')) {
+                $publicPath = $this->fileUploadService->uploadFile($request->file('image'), 'public/products');
+                $this->saveImage($product, $publicPath);
+            }
 
             $this->productRepository->syncCategories($product->id, $request->get('categories'));
 
